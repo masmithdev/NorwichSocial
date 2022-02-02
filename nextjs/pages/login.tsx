@@ -9,12 +9,15 @@ const Login: NextPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    const loginResponse = login(email, password);
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    const loginResponse = await login(email, password);
     if (loginResponse.success) {
       router.push('/home');
     }
-    e.preventDefault();
+    else {
+      console.log(loginResponse);
+    }
   }
 
   const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) => setEmail(e.target.value);
