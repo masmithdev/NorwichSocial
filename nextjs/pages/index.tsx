@@ -1,11 +1,34 @@
-import type { NextPage } from 'next'
+import { getAuthToken } from '@/serverSrc/services/auth.service'
+import type { GetServerSideProps, NextPage } from 'next'
+import Link from 'next/link'
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
   return (
     <div>
-      Hello, World!
+      Hello, non-member!
+      <Link href='/login'>
+        <a>Login</a>
+      </Link>
     </div>
   )
 }
 
-export default Home
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  
+  const user = getAuthToken(context.req.cookies);
+  if (user && user.loggedIn && user.userId) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/home'
+      }
+    }
+  }
+
+  return { props: {}}
+}
+
+
+export default Index;

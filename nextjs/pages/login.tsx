@@ -1,8 +1,9 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { login } from '../client/services/auth.service';
+import { getAuthToken } from '@/serverSrc/services/auth.service';
+import { login } from '@/clientSrc/services/auth.service';
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -12,7 +13,8 @@ const Login: NextPage = () => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const loginResponse = await login(email, password);
-    if (loginResponse.success) {
+    console.log(loginResponse);
+    if (loginResponse.loggedIn) {
       router.push('/home');
     }
     else {
@@ -21,7 +23,6 @@ const Login: NextPage = () => {
   }
 
   const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (e) => setEmail(e.target.value);
-
   const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => setPassword(e.target.value);
 
   return (
@@ -42,7 +43,20 @@ const Login: NextPage = () => {
       <div>Not a member? <Link href="/register"><a>Join us here!</a></Link></div>
     </div>
   );
+}
 
+export const getServerSideProps: GetServerSideProps = async (context) => {  
+  const user = getAuthToken(context.req.cookies);
+  if (user && user.loggedIn && user.userId) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/home'
+      }
+    }
+  }
+
+  return { props: {}}
 }
 
 export default Login;
