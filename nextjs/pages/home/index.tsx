@@ -1,12 +1,14 @@
+import { AppPage } from "@/clientSrc/AppPage";
 import { NextPage } from "next";
 
-export interface HomeProps {}
 
-const Home : NextPage<HomeProps> = (props) => {
+const Home: AppPage = () => {
 
   return (
     <div>Home</div>
   );
 }
+
+Home.isPrivate = true;
 
 export default Home;

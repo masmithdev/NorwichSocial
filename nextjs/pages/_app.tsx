@@ -1,15 +1,21 @@
+import { AppPage } from '@/clientSrc/AppPage'
+import { AppProps } from 'next/app'
 import '../styles/globals.scss'
-import type { AppProps } from 'next/app'
-import { IBaseProps } from '../src/shared/IBaseProps'
+import UserProvider from '@/clientSrc/components/UserProvider'
+import { ApplicationWrapper } from '@/clientSrc/components/ApplicationWrappr'
 
-interface CustomAppProps extends AppProps<IBaseProps> {
-  pageProps : IBaseProps;
+type CustomAppProps = AppProps & {
+  Component: AppPage;
 }
 
 function MyApp({ Component, pageProps }: CustomAppProps) {
 
   return (
-      <Component {...pageProps} />
+    <UserProvider>
+      <ApplicationWrapper isPrivate={Component.isPrivate} redirectAuthUsers={Component.redirectAuthUsers}>
+        <Component {...pageProps} />
+      </ApplicationWrapper>
+    </UserProvider>
   )
 }
 

@@ -1,8 +1,7 @@
-import { getAuthToken } from '@/serverSrc/services/auth.service'
-import type { GetServerSideProps, NextPage } from 'next'
+import { AppPage } from '@/clientSrc/AppPage'
 import Link from 'next/link'
 
-const Index: NextPage = () => {
+const Index: AppPage = () => {
   return (
     <div>
       Hello, non-member!
@@ -13,22 +12,5 @@ const Index: NextPage = () => {
   )
 }
 
-
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  
-  const user = getAuthToken(context.req.cookies);
-  if (user && user.loggedIn && user.userId) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/home'
-      }
-    }
-  }
-
-  return { props: {}}
-}
-
-
+Index.redirectAuthUsers = true;
 export default Index;

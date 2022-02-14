@@ -1,12 +1,11 @@
-import { NextPage } from "next";
+import { AppPage } from "@/clientSrc/AppPage";
 
-export interface EventsProps {}
-
-const Events : NextPage<EventsProps> = (props) => {
+const Events: AppPage = () => {
 
   return (
     <div>Events</div>
   );
 }
 
+Events.isPrivate = true;
 export default Events;

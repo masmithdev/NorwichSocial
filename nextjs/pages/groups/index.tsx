@@ -1,12 +1,11 @@
-import { NextPage } from "next";
+import { AppPage } from "@/clientSrc/AppPage";
 
-export interface GroupsProps {}
-
-const Groups : NextPage<GroupsProps> = (props) => {
+const Groups: AppPage = () => {
 
   return (
     <div>Groups</div>
   );
 }
 
+Groups.isPrivate = true;
 export default Groups;

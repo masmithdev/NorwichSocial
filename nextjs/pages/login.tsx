@@ -1,21 +1,25 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { getAuthToken } from '@/serverSrc/services/auth.service';
+import React, { useContext, useState } from 'react';
 import { login } from '@/clientSrc/services/auth.service';
+import { UserContext } from '@/clientSrc/components/UserProvider';
+import { AppPage } from '@/clientSrc/AppPage';
 
-const Login: NextPage = () => {
+const Login: AppPage = () => {
   const router = useRouter();
+  const { user, refresh } = useContext(UserContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    console.log(1);
     e.preventDefault();
+    console.log(2);
     const loginResponse = await login(email, password);
     console.log(loginResponse);
     if (loginResponse.loggedIn) {
-      router.push('/home');
+      refresh();
     }
     else {
       console.log(loginResponse);
@@ -45,18 +49,5 @@ const Login: NextPage = () => {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {  
-  const user = getAuthToken(context.req.cookies);
-  if (user && user.loggedIn && user.userId) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/home'
-      }
-    }
-  }
-
-  return { props: {}}
-}
-
+Login.redirectAuthUsers = true;
 export default Login;
